@@ -52,8 +52,8 @@ function PlayerCard () {
     return (
     <div>
     <Container maxWidth='xl'>
-        <Grid container spacing={4} justifyContent="center" fontSize={18} alignItems="center" columns={2} paddingTop={8} paddingBottom={8}>
-          <Grid item xs ={3} backgroundColor={playerColorOne} borderRadius={8}>
+        <Grid container spacing={4} justifyContent="center" fontSize={18} alignItems="center" columns={4} paddingTop={8} paddingBottom={8} paddingLeft={8} paddingRight={8}>
+          <Grid item xs ={2} backgroundColor={playerColorOne} borderRadius={8}>
             <Paper className= {ClassNames.customBorderRadius}>Player 1</Paper>
             <FormControl>
           <InputLabel></InputLabel>
@@ -71,7 +71,7 @@ function PlayerCard () {
             </Select>
         </FormControl>
           </Grid>
-          <Grid item xs ={3} backgroundColor={playerColorTwo} borderRadius={8}>
+          <Grid item xs ={2} backgroundColor={playerColorTwo} borderRadius={8}>
             <Paper className= {ClassNames.Paper}>Player 2</Paper>
             <FormControl>
           <InputLabel></InputLabel>
@@ -88,7 +88,7 @@ function PlayerCard () {
             </Select>
         </FormControl>
           </Grid>
-          <Grid item xs ={3} backgroundColor={playerColorThree} borderRadius={8}>
+          <Grid item xs ={2} backgroundColor={playerColorThree} borderRadius={8}>
             <Paper className= {ClassNames.Paper}>Player 3</Paper>
             <FormControl>
           <InputLabel></InputLabel>
@@ -105,7 +105,7 @@ function PlayerCard () {
             </Select>
         </FormControl>
           </Grid>
-          <Grid item xs ={3} backgroundColor={playerColorFour} borderRadius={8}>
+          <Grid item xs ={2} backgroundColor={playerColorFour} borderRadius={8}>
             <Paper className= {ClassNames.Paper}>Player 4</Paper>
             <FormControl>
           <InputLabel></InputLabel>
