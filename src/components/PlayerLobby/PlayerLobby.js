@@ -9,7 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { ClassNames, withTheme } from "@emotion/react";
-import { blue, green, red, yellow, lightBlue } from "@mui/material/colors";
+import { blue, green, red, yellow } from "@mui/material/colors";
 
 const colors = [
   { value: red[500], label: "Red" },
@@ -18,7 +18,7 @@ const colors = [
   { value: yellow[500], label: "Yellow" },
 ];
 
-const Player = (props) => {
+const PlayerLobby = (props) => {
   const { changePlayerColor, players } = useContext(AppContext);
 
   const handleColorChange = (event) => {
@@ -94,4 +94,4 @@ const Player = (props) => {
   );
 };
 
-export default Player;
+export default PlayerLobby;
