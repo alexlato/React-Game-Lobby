@@ -1,10 +1,10 @@
 import { render } from "@testing-library/react";
 import React, { useState, createContext, useContext } from "react";
-import PlayerLobby from "../PlayerLobby/PlayerLobby";
+import PlayerLobby from "../Player/Player";
 
-const AppContext = createContext(null);
+const PlayerContext = createContext(null);
 
-export const Provider = () => {
+export const PlayerProvider = ({ children }) => {
   const [players, setPlayers] = useState([
     {
       id: 1,
@@ -49,14 +49,10 @@ export const Provider = () => {
   };
 
   return (
-    <AppContext.Provider value={{ players, setPlayers, changePlayerColor }}>
-      <>
-        {players.map((player) => (
-          <PlayerLobby key={player.id} player={player} />
-        ))}
-      </>
-    </AppContext.Provider>
+    <PlayerContext.Provider value={{ players, setPlayers, changePlayerColor }}>
+      <>{children}</>
+    </PlayerContext.Provider>
   );
 };
 
-export default AppContext;
+export default PlayerContext;

@@ -1,23 +1,20 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Provider, AppContext } from "./components/Context/Context";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { PlayerProvider } from "./components/Context/PlayerProvider";
 import PlayerLobby from "./components/PlayerLobby/PlayerLobby";
+import Login from "./components/Login/Login";
 
 const App = () => {
   return (
-    <Provider>
-      <BrowserRouter>
-        <div>
-          <Routes>
-            <Route path="/">
-              {" "}
-              <PlayerLobby />
-            </Route>
-          </Routes>
-        </div>
-      </BrowserRouter>
-    </Provider>
+    <PlayerProvider>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+          <Route exact path="/playerlobby" element={<PlayerLobby />} />
+        </Routes>
+      </Router>
+    </PlayerProvider>
   );
 };
 
