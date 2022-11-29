@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, createContext, useContext } from "react";
-import AppContext from "../Context/PlayerProvider";
+import PlayerContext from "../Context/PlayerProvider";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
@@ -20,7 +20,7 @@ const colors = [
 ];
 
 const Player = (props) => {
-  const { changePlayerColor, players } = useContext(AppContext);
+  const { changePlayerColor, players } = useContext(PlayerContext);
 
   const handleColorChange = (event) => {
     const newColor = event.target.value;
