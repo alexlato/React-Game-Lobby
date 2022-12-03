@@ -5,6 +5,7 @@ import { PlayerProvider } from "./components/Context/PlayerProvider";
 import PlayerLobby from "./components/PlayerLobby/PlayerLobby";
 import Login from "./components/Login/Login";
 import { AuthProvider } from "./components/Context/AuthProvider";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   return (
@@ -12,8 +13,15 @@ const App = () => {
       <PlayerProvider>
         <Router>
           <Routes>
-            <Route exact path="/" element={<Login />} />
-            <Route exact path="/playerlobby" element={<PlayerLobby />} />
+            <Route path="/" element={<Login />} />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <PlayerLobby />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </Router>
       </PlayerProvider>

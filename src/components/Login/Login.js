@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 import { TextField } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { useAuth } from "../Context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -13,7 +14,9 @@ const Login = () => {
     password: "",
   });
 
-  const { signup } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { signup, login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setInputs((prevState) => ({
@@ -22,11 +25,31 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  async function handleSignup(e) {
     e.preventDefault();
     console.log(inputs);
-    signup(inputs.email, inputs.password);
-  };
+
+    try {
+      setLoading(true);
+      await signup(inputs.email, inputs.password);
+      navigate("/dashboard");
+    } catch {}
+
+    setLoading(false);
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    console.log(inputs);
+
+    try {
+      setLoading(true);
+      await login(inputs.email, inputs.password);
+      navigate("/dashboard");
+    } catch {}
+
+    setLoading(false);
+  }
 
   const resetState = () => {
     setIsSignup(!isSignup);
@@ -35,7 +58,7 @@ const Login = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={isSignup ? handleSignup : handleLogin}>
         <Box
           display="flex"
           flexDirection="column"
@@ -86,6 +109,7 @@ const Login = () => {
             placeholder="Password"
           ></TextField>
           <Button
+            disabled={loading}
             type="submit"
             sx={{ marginTop: 3, borderRadius: 3 }}
             variant="contained"
