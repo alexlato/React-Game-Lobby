@@ -14,14 +14,7 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <PlayerLobby />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/dashboard" element={<PlayerLobby />} />
           </Routes>
         </Router>
       </PlayerProvider>

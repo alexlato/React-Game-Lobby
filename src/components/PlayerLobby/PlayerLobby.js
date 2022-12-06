@@ -2,9 +2,11 @@ import React from "react";
 import { useState, createContext, useContext } from "react";
 import PlayerContext from "../Context/PlayerProvider";
 import Player from "../Player/Player";
-import { Container, Grid, Paper, Button } from "@mui/material";
+import { Container, Grid, Paper, Button, Avatar } from "@mui/material";
 import { useAuth } from "../Context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { storage } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const PlayerLobby = (props) => {
   const { players } = useContext(PlayerContext);
@@ -18,6 +20,33 @@ const PlayerLobby = (props) => {
       navigate("/");
     } catch {}
   }
+
+  const [image, setImage] = useState(null);
+  const [url, setUrl] = useState(null);
+
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = () => {
+    const imageRef = ref(storage, "image");
+    uploadBytes(imageRef, image)
+      .then(() => {
+        getDownloadURL(imageRef)
+          .then((url) => {
+            setUrl(url);
+          })
+          .catch((error) => {
+            console.log(error.message, "error getting the image url");
+          });
+        setImage(null);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
   //player lobby that gets rendered by the mapping of Player
   return (
@@ -60,6 +89,13 @@ const PlayerLobby = (props) => {
             <Button variant="link" onClick={handleLogout}>
               Log Out
             </Button>
+            <input type="file" onChange={handleImageChange} />
+            <Button onClick={handleUpload}>Upload</Button>
+            <Avatar
+              alt="Remy Sharp"
+              src={url}
+              sx={{ width: 150, height: 150 }}
+            />
           </Grid>
         </Container>
       </div>
