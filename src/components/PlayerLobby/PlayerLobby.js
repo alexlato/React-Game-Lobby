@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, createContext, useContext } from "react";
 import PlayerContext from "../Context/PlayerProvider";
 import Player from "../Player/Player";
 import { Container, Grid, Paper, Button, Avatar } from "@mui/material";
 import { useAuth } from "../Context/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import { storage } from "../../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { updateProfile } from "firebase/auth";
 
 const PlayerLobby = (props) => {
   const { players } = useContext(PlayerContext);
 
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, upload } = useAuth();
   const navigate = useNavigate();
 
   async function handleLogout() {
@@ -21,32 +20,25 @@ const PlayerLobby = (props) => {
     } catch {}
   }
 
-  const [image, setImage] = useState(null);
-  const [url, setUrl] = useState(null);
+  const [photo, setPhoto] = useState(null);
+  const [photoURL, setPhotoURL] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
-      setImage(e.target.files[0]);
+      setPhoto(e.target.files[0]);
     }
   };
 
-  const handleUpload = () => {
-    const imageRef = ref(storage, "image");
-    uploadBytes(imageRef, image)
-      .then(() => {
-        getDownloadURL(imageRef)
-          .then((url) => {
-            setUrl(url);
-          })
-          .catch((error) => {
-            console.log(error.message, "error getting the image url");
-          });
-        setImage(null);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
+  function handleUpload() {
+    upload(photo, currentUser, setLoading);
+  }
+
+  useEffect(() => {
+    if (currentUser?.photoURL) {
+      setPhotoURL(currentUser.photoURL);
+    }
+  }, [currentUser]);
 
   //player lobby that gets rendered by the mapping of Player
   return (
@@ -90,11 +82,13 @@ const PlayerLobby = (props) => {
               Log Out
             </Button>
             <input type="file" onChange={handleImageChange} />
-            <Button onClick={handleUpload}>Upload</Button>
+            <Button onClick={handleUpload} disabled={loading || !photo}>
+              Upload
+            </Button>
             <Avatar
               alt="Remy Sharp"
-              src={url}
-              sx={{ width: 150, height: 150 }}
+              src={photoURL}
+              sx={{ width: 100, height: 100 }}
             />
           </Grid>
         </Container>

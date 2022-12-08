@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, createContext, useContext } from "react";
 import PlayerContext from "../Context/PlayerProvider";
 import Select from "@mui/material/Select";
@@ -12,15 +12,15 @@ import { ClassNames, withTheme } from "@emotion/react";
 import { blue, green, red, yellow } from "@mui/material/colors";
 import { color } from "@mui/system";
 
-const colors = [
-  { value: red[500], label: "Red" },
-  { value: green[500], label: "Green" },
-  { value: blue[500], label: "Blue" },
-  { value: yellow[500], label: "Yellow" },
-];
-
 const Player = (props) => {
   const { changePlayerColor, players } = useContext(PlayerContext);
+
+  const [colors, setColors] = useState([
+    { value: red[500], label: "Red" },
+    { value: green[500], label: "Green" },
+    { value: blue[500], label: "Blue" },
+    { value: yellow[500], label: "Yellow" },
+  ]);
 
   const handleColorChange = (event) => {
     const newColor = event.target.value;
@@ -53,6 +53,17 @@ const Player = (props) => {
   const selectedColor = colors.find((color) => {
     return props.player?.color === color.label;
   });
+
+  useEffect(() => {
+    const data = localStorage.getItem("player-colors");
+    if (data) {
+      setColors(JSON.parse(data));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("player-colors", JSON.stringify(colors));
+  }, []);
 
   //?. optional chaining operator, if available (not undefined or null) grab value, if undefined or null stop right there
   return (

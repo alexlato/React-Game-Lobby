@@ -3,6 +3,9 @@ import { auth } from "../../firebase";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../firebase";
+import { updateProfile } from "firebase/auth";
 
 const AuthContext = React.createContext();
 
@@ -35,11 +38,25 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
+  async function upload(file, currentUser, setLoading) {
+    const fileRef = ref(storage, currentUser.uid + ".png");
+
+    setLoading(true);
+
+    const snapshot = await uploadBytes(fileRef, file);
+    const photoURL = await getDownloadURL(fileRef);
+
+    updateProfile(currentUser, { photoURL });
+
+    setLoading(false);
+  }
+
   const value = {
     currentUser,
     login,
     signup,
     logout,
+    upload,
   };
 
   return (
