@@ -20,6 +20,7 @@ const PlayerLobby = (props) => {
     } catch {}
   }
 
+  //upload
   const [photo, setPhoto] = useState(null);
   const [photoURL, setPhotoURL] = useState();
   const [loading, setLoading] = useState(false);

@@ -1,28 +1,42 @@
 import { render } from "@testing-library/react";
 import React, { useState, createContext, useContext } from "react";
+import { useEffect } from "react";
 import PlayerLobby from "../Player/Player";
 
 const PlayerContext = createContext(null);
 
 export const PlayerProvider = ({ children }) => {
-  const [players, setPlayers] = useState([
-    {
-      id: 1,
-      color: null,
-    },
-    {
-      id: 2,
-      color: null,
-    },
-    {
-      id: 3,
-      color: null,
-    },
-    {
-      id: 4,
-      color: null,
-    },
-  ]);
+  const [players, setPlayers] = useState(() => {
+    const fallbackPlayers = [
+      {
+        id: 1,
+        color: null,
+      },
+      {
+        id: 2,
+        color: null,
+      },
+      {
+        id: 3,
+        color: null,
+      },
+      {
+        id: 4,
+        color: null,
+      },
+    ];
+
+    const localStoragePlayers = localStorage.getItem("players");
+    if (localStoragePlayers !== null) {
+      return JSON.parse(localStoragePlayers);
+    } else {
+      return fallbackPlayers;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("players", JSON.stringify(players));
+  }, [players]);
 
   //calls changePlayerColor, passing a new playerId and newColor
   //checks memory location of array

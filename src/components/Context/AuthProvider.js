@@ -38,6 +38,7 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
+  //upload
   async function upload(file, currentUser, setLoading) {
     const fileRef = ref(storage, currentUser.uid + ".png");
 

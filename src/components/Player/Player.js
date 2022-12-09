@@ -12,15 +12,15 @@ import { ClassNames, withTheme } from "@emotion/react";
 import { blue, green, red, yellow } from "@mui/material/colors";
 import { color } from "@mui/system";
 
+const colors = [
+  { value: red[500], label: "Red" },
+  { value: green[500], label: "Green" },
+  { value: blue[500], label: "Blue" },
+  { value: yellow[500], label: "Yellow" },
+];
+
 const Player = (props) => {
   const { changePlayerColor, players } = useContext(PlayerContext);
-
-  const [colors, setColors] = useState([
-    { value: red[500], label: "Red" },
-    { value: green[500], label: "Green" },
-    { value: blue[500], label: "Blue" },
-    { value: yellow[500], label: "Yellow" },
-  ]);
 
   const handleColorChange = (event) => {
     const newColor = event.target.value;
@@ -40,7 +40,7 @@ const Player = (props) => {
       }
     }
 
-    if (props.player?.color === color.label) {
+    if (props.player.color === color.label) {
       isColorAllowed = true;
     }
 
@@ -51,20 +51,9 @@ const Player = (props) => {
 
   //making a new variable and setting it to the result of "finding the color in colors that matches the props.player.color label"
   const selectedColor = colors.find((color) => {
-    return props.player?.color === color.label;
+    return props.player.color === color.label;
   });
-
-  useEffect(() => {
-    const data = localStorage.getItem("player-colors");
-    if (data) {
-      setColors(JSON.parse(data));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("player-colors", JSON.stringify(colors));
-  }, []);
-
+  console.log(props.player);
   //?. optional chaining operator, if available (not undefined or null) grab value, if undefined or null stop right there
   return (
     <div>
@@ -92,10 +81,17 @@ const Player = (props) => {
             </Paper>
             <FormControl>
               <InputLabel></InputLabel>
-              <Select value={props.player?.color} onChange={handleColorChange}>
-                <MenuItem value={null}>No Color</MenuItem>
+              <Select
+                value={props.player.color ?? "default"}
+                onChange={handleColorChange}
+              >
+                <MenuItem value={"default"}>No Color</MenuItem>
                 {availableColors.map((color) => {
-                  return <MenuItem value={color.label}>{color.label}</MenuItem>;
+                  return (
+                    <MenuItem key={color.label} value={color.label}>
+                      {color.label}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
