@@ -1,7 +1,6 @@
-import { render } from "@testing-library/react";
 import React, { useState, createContext, useContext } from "react";
 import { useEffect } from "react";
-import PlayerLobby from "../Player/Player";
+import axios from "axios";
 
 const PlayerContext = createContext(null);
 
@@ -37,6 +36,19 @@ export const PlayerProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("players", JSON.stringify(players));
   }, [players]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const colorsFromCloudFunction = await axios
+        .get(
+          "https://us-central1-react-game-lobby-ece8f.cloudfunctions.net/getColors"
+        )
+        .then(() => {
+          setPlayers(colorsFromCloudFunction);
+          console.log(colorsFromCloudFunction);
+        });
+    }
+  }, []);
 
   //calls changePlayerColor, passing a new playerId and newColor
   //checks memory location of array
