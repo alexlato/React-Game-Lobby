@@ -38,16 +38,12 @@ export const PlayerProvider = ({ children }) => {
   }, [players]);
 
   useEffect(() => {
-    async function fetchData() {
-      const colorsFromCloudFunction = await axios
-        .get(
-          "https://us-central1-react-game-lobby-ece8f.cloudfunctions.net/getColors"
-        )
-        .then(() => {
-          setPlayers(colorsFromCloudFunction);
-          console.log(colorsFromCloudFunction);
-        });
-    }
+    axios
+      .get(
+        "https://us-central1-react-game-lobby-ece8f.cloudfunctions.net/getColors"
+      )
+      .then((res) => setPlayers(res.data))
+      .catch(console.log);
   }, []);
 
   //calls changePlayerColor, passing a new playerId and newColor
