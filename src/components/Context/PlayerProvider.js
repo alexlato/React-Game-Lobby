@@ -5,42 +5,12 @@ import axios from "axios";
 const PlayerContext = createContext(null);
 
 export const PlayerProvider = ({ children }) => {
-  const [players, setPlayers] = useState(() => {
-    const fallbackPlayers = [
-      {
-        id: 1,
-        color: null,
-      },
-      {
-        id: 2,
-        color: null,
-      },
-      {
-        id: 3,
-        color: null,
-      },
-      {
-        id: 4,
-        color: null,
-      },
-    ];
-
-    const localStoragePlayers = localStorage.getItem("players");
-    if (localStoragePlayers !== null) {
-      return JSON.parse(localStoragePlayers);
-    } else {
-      return fallbackPlayers;
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("players", JSON.stringify(players));
-  }, [players]);
+  const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     axios
       .get(
-        "https://us-central1-react-game-lobby-ece8f.cloudfunctions.net/getColors"
+        "https://us-central1-react-game-lobby-ece8f.cloudfunctions.net/getColors?uid=B57TU3S2RlXhKWDAI6NylNQ0jWA2"
       )
       .then((res) => setPlayers(res.data))
       .catch(console.log);
@@ -68,6 +38,13 @@ export const PlayerProvider = ({ children }) => {
     newPlayers.sort((a, b) => a.id - b.id);
 
     setPlayers(newPlayers);
+
+    axios
+      .post(
+        "https://us-central1-react-game-lobby-ece8f.cloudfunctions.net/setColors?uid=B57TU3S2RlXhKWDAI6NylNQ0jWA2",
+        newPlayers
+      )
+      .catch(console.log);
   };
 
   return (
